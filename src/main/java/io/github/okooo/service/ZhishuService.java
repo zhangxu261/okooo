@@ -43,7 +43,7 @@ public class ZhishuService {
                 if (existed.getRemind().contains("->")) {
                     last = existed.getRemind().substring(existed.getRemind().lastIndexOf("->") + 2);
                 }
-                if (!last.equals(existed.getRemind())) {
+                if (!last.equals(zhishu.getRemind())) {
                     existed.setRemind(existed.getRemind() + "->" + zhishu.getRemind());
                 }
                 existed.setMatchResult(zhishu.getMatchResult());
