@@ -16,7 +16,7 @@ public class ZhishuService {
     @Autowired
     private ZhishuMapper zhishuMapper;
 
-    @Scheduled(initialDelay = 10000, fixedRate = 3600000)
+    @Scheduled(initialDelay = 10000, fixedRate = 1800000)
     public void fetch() {
         String url = "http://www.okooo.com/jingcai/shuju/zhishu/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
