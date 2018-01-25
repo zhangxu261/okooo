@@ -57,7 +57,7 @@ public class OkoooService {
         }
     }
 
-    @Scheduled(initialDelay = 10000, fixedRate = 1800000)
+    @Scheduled(initialDelay = 10000, fixedRate = 1810000)
     public void fetchChayi() {
         String url = "http://www.okooo.com/jingcai/shuju/chayi/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
