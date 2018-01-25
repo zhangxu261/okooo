@@ -1,6 +1,6 @@
 package io.github.okooo.web.rest;
 
-import io.github.okooo.service.ZhishuService;
+import io.github.okooo.service.OkoooService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
@@ -13,19 +13,25 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableScheduling
 @SpringBootApplication
 @RestController
-public class ZhishuController {
+public class OkoooController {
 
     @Autowired
-    private ZhishuService zhishuService;
+    private OkoooService okoooService;
 
     @GetMapping("/")
     public ResponseEntity<String> hello() {
         return ResponseEntity.ok("hello world");
     }
 
-    @GetMapping("/fetch")
-    public ResponseEntity<?> fetch() {
-        zhishuService.fetch();
+    @GetMapping("/zhishu")
+    public ResponseEntity<?> zhishu() {
+        okoooService.fetchZhishu();
+        return ResponseEntity.ok("fetch ok");
+    }
+
+    @GetMapping("/chayi")
+    public ResponseEntity<?> chayi() {
+        okoooService.fetchChayi();
         return ResponseEntity.ok("fetch ok");
     }
 
