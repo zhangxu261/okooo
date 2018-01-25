@@ -21,7 +21,7 @@ public class OkoooService {
     @Autowired
     private ChayiMapper chayiMapper;
 
-    @Scheduled(initialDelay = 10000, fixedRate = 1800000)
+    @Scheduled(cron = "1 */20 * * * ?")
     public void fetchZhishu() {
         String url = "http://www.okooo.com/jingcai/shuju/zhishu/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
@@ -57,7 +57,7 @@ public class OkoooService {
         }
     }
 
-    @Scheduled(initialDelay = 10000, fixedRate = 1810000)
+    @Scheduled(cron = "2 */20 * * * ?")
     public void fetchChayi() {
         String url = "http://www.okooo.com/jingcai/shuju/chayi/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
@@ -91,13 +91,21 @@ public class OkoooService {
             if (existed == null) {
                 chayiMapper.insertSelective(chayi);
             } else {
-                String last = existed.getTzbRemind();
+                String lastTzb = existed.getTzbRemind();
                 if (existed.getTzbRemind().contains("->")) {
-                    last = existed.getTzbRemind().substring(existed.getTzbRemind().lastIndexOf("->") + 2);
+                    lastTzb = existed.getTzbRemind().substring(existed.getTzbRemind().lastIndexOf("->") + 2);
                 }
-                if (!last.equals(chayi.getTzbRemind())) {
+                if (!lastTzb.equals(chayi.getTzbRemind())) {
                     existed.setTzbRemind(existed.getTzbRemind() + "->" + chayi.getTzbRemind());
                 }
+                String lastJql = existed.getJqlRemind();
+                if (existed.getJqlRemind().contains("->")) {
+                    lastJql = existed.getJqlRemind().substring(existed.getJqlRemind().lastIndexOf("->") + 2);
+                }
+                if (!lastJql.equals(chayi.getJqlRemind())) {
+                    existed.setJqlRemind(existed.getJqlRemind() + "->" + chayi.getJqlRemind());
+                }
+
                 existed.setMatchResult(chayi.getMatchResult());
                 chayiMapper.updateByPrimaryKeySelective(existed);
             }
