@@ -3,7 +3,6 @@ package io.github.okooo.domain;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 @Table
 public class Chayi {
@@ -34,9 +33,6 @@ public class Chayi {
 
     @Column(length = 10)
     private String matchResult;
-
-    private Date createdTime;
-    private Date updatedTime;
 
     public Long getId() {
         return id;
@@ -110,19 +106,4 @@ public class Chayi {
         this.matchResult = matchResult;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
-    }
 }
