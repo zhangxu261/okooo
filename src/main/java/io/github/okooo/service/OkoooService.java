@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Service
 public class OkoooService {
 
@@ -59,7 +62,10 @@ public class OkoooService {
 
     @Scheduled(cron = "2 */20 * * * ?")
     public void fetchChayi() {
-        String url = "http://www.okooo.com/jingcai/shuju/chayi/";
+        Date currentDate = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String url = "http://www.okooo.com/jingcai/shuju/chayi/" + df.format(currentDate);
+
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
         Document doc = Jsoup.parse(html);
 
