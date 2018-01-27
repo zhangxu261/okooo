@@ -49,10 +49,9 @@ public class OkoooService {
             } else {
                 String last = existed.getRemind();
                 if (existed.getRemind().contains("->")) {
-                    last = existed.getRemind().substring(existed.getRemind().lastIndexOf("->") + 2);
-                }
-                if (!last.equals(zhishu.getRemind())) {
-                    existed.setRemind(existed.getRemind() + "->" + zhishu.getRemind());
+                    existed.setRemind(existed.getRemind().substring(0, 2) + "->" + zhishu.getRemind());
+                } else {
+                    existed.setRemind(zhishu.getRemind());
                 }
                 existed.setMatchResult(zhishu.getMatchResult());
                 zhishuMapper.updateByPrimaryKeySelective(existed);
@@ -97,21 +96,8 @@ public class OkoooService {
             if (existed == null) {
                 chayiMapper.insertSelective(chayi);
             } else {
-                String lastTzb = existed.getTzbRemind();
-                if (existed.getTzbRemind().contains("->")) {
-                    lastTzb = existed.getTzbRemind().substring(existed.getTzbRemind().lastIndexOf("->") + 2);
-                }
-                if (!lastTzb.equals(chayi.getTzbRemind())) {
-                    existed.setTzbRemind(existed.getTzbRemind() + "->" + chayi.getTzbRemind());
-                }
-                String lastJql = existed.getJqlRemind();
-                if (existed.getJqlRemind().contains("->")) {
-                    lastJql = existed.getJqlRemind().substring(existed.getJqlRemind().lastIndexOf("->") + 2);
-                }
-                if (!lastJql.equals(chayi.getJqlRemind())) {
-                    existed.setJqlRemind(existed.getJqlRemind() + "->" + chayi.getJqlRemind());
-                }
-
+                existed.setTzbRemind(chayi.getTzbRemind());
+                existed.setJqlRemind(chayi.getJqlRemind());
                 existed.setMatchResult(chayi.getMatchResult());
                 chayiMapper.updateByPrimaryKeySelective(existed);
             }
