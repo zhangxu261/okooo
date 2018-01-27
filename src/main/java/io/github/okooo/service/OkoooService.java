@@ -47,7 +47,6 @@ public class OkoooService {
             if (existed == null) {
                 zhishuMapper.insertSelective(zhishu);
             } else {
-                String last = existed.getRemind();
                 if (existed.getRemind().contains("->")) {
                     existed.setRemind(existed.getRemind().substring(0, 2) + "->" + zhishu.getRemind());
                 } else {
@@ -96,7 +95,12 @@ public class OkoooService {
             if (existed == null) {
                 chayiMapper.insertSelective(chayi);
             } else {
-                existed.setTzbRemind(chayi.getTzbRemind());
+                if (existed.getTzbRemind().contains("->")) {
+                    existed.setTzbRemind(existed.getTzbRemind().substring(0, 2) + "->" + chayi.getTzbRemind());
+                } else {
+                    existed.setTzbRemind(chayi.getTzbRemind());
+                }
+
                 existed.setJqlRemind(chayi.getJqlRemind());
                 existed.setMatchResult(chayi.getMatchResult());
                 chayiMapper.updateByPrimaryKeySelective(existed);
