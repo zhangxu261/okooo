@@ -55,7 +55,9 @@ public class OkoooService {
                 okooo.setMatchTime(matchTime);
                 okooo.setHostTeam(hostTeam);
                 okooo.setGuestTeam(guestTeam);
-                okooo.setZhishu(zhishu);
+                if (StringUtils.isNotEmpty(zhishu)) {
+                    okooo.setZhishu(zhishu);
+                }
                 okooo.setMatchResult(matchResult);
                 okoooMapper.insertSelective(okooo);
             } else {
@@ -150,6 +152,10 @@ public class OkoooService {
                 String _ol = oddss[2];
                 String odds = diff(ow, _ow) + "|" + diff(od, _od) + "|" + diff(ol, _ol);
                 existed.setOdds(odds);
+            }
+
+            if ("||".equals(existed.getChayi())) {
+                existed.setChayi(null);
             }
 
             okoooMapper.updateByPrimaryKeySelective(existed);
