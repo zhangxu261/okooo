@@ -29,12 +29,12 @@ public class OkoooService {
     //每20分钟抓一次
     @Scheduled(cron = "1 */20 * * * ?")
     public void fetch() {
-        fetchZhishu();
-        fetchChayi();
-        fetchKaili(1);
+        fetchIdx();
+        fetchDiff();
+        fetchKelly(1);
     }
 
-    public void fetchZhishu() {
+    public void fetchIdx() {
         String url = "http://www.okooo.com/jingcai/shuju/zhishu/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
         Document doc = Jsoup.parse(html);
@@ -71,7 +71,7 @@ public class OkoooService {
         }
     }
 
-    public void fetchKaili(int page) {
+    public void fetchKelly(int page) {
         Date currentDate = new Date();
         SimpleDateFormat df = new SimpleDateFormat("u");
 
@@ -118,7 +118,7 @@ public class OkoooService {
         }
     }
 
-    public void fetchChayi() {
+    public void fetchDiff() {
         Date currentDate = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String url = "http://www.okooo.com/jingcai/shuju/chayi/" + df.format(currentDate);
