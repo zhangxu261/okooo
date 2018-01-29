@@ -22,7 +22,7 @@ public class OkoooServiceTest {
 
     @Test
     public void fetch() {
-        service.fetchKaili();
+        service.fetchChayi();
     }
 
     @Test

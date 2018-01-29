@@ -9,13 +9,13 @@ public class Okooo {
     private String serial;
     private String matchType;
     private String matchTime;
-    private String hostTeam;
-    private String guestTeam;
-    private String zhishu;
-    private String chayi;
-    private String kaili;
+    private String host;
+    private String guest;
+    private String idx;
+    private String diff;
+    private String kelly;
     private String odds;
-    private String matchResult;
+    private String result;
 
     public Long getId() {
         return id;
@@ -49,44 +49,44 @@ public class Okooo {
         this.matchTime = matchTime;
     }
 
-    public String getHostTeam() {
-        return hostTeam;
+    public String getHost() {
+        return host;
     }
 
-    public void setHostTeam(String hostTeam) {
-        this.hostTeam = hostTeam;
+    public void setHost(String host) {
+        this.host = host;
     }
 
-    public String getGuestTeam() {
-        return guestTeam;
+    public String getGuest() {
+        return guest;
     }
 
-    public void setGuestTeam(String guestTeam) {
-        this.guestTeam = guestTeam;
+    public void setGuest(String guest) {
+        this.guest = guest;
     }
 
-    public String getZhishu() {
-        return zhishu;
+    public String getIdx() {
+        return idx;
     }
 
-    public void setZhishu(String zhishu) {
-        this.zhishu = zhishu;
+    public void setIdx(String idx) {
+        this.idx = idx;
     }
 
-    public String getChayi() {
-        return chayi;
+    public String getDiff() {
+        return diff;
     }
 
-    public void setChayi(String chayi) {
-        this.chayi = chayi;
+    public void setDiff(String diff) {
+        this.diff = diff;
     }
 
-    public String getKaili() {
-        return kaili;
+    public String getKelly() {
+        return kelly;
     }
 
-    public void setKaili(String kaili) {
-        this.kaili = kaili;
+    public void setKelly(String kelly) {
+        this.kelly = kelly;
     }
 
     public String getOdds() {
@@ -97,11 +97,11 @@ public class Okooo {
         this.odds = odds;
     }
 
-    public String getMatchResult() {
-        return matchResult;
+    public String getResult() {
+        return result;
     }
 
-    public void setMatchResult(String matchResult) {
-        this.matchResult = matchResult;
+    public void setResult(String result) {
+        this.result = result;
     }
 }

@@ -44,10 +44,10 @@ public class OkoooService {
             String serial = tds.get(0).text();
             String matchType = tds.get(1).text();
             String matchTime = tds.get(2).text();
-            String hostTeam = tds.get(3).text();
-            String guestTeam = tds.get(5).text();
-            String zhishu = tds.get(12).text().replaceAll("\\s", "");
-            String matchResult = tds.get(13).text();
+            String host = tds.get(3).text();
+            String guest = tds.get(5).text();
+            String idx = tds.get(12).text().replaceAll("\\s", "");
+            String result = tds.get(13).text();
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
             if (existed == null) {
@@ -55,15 +55,15 @@ public class OkoooService {
                 okooo.setSerial(serial);
                 okooo.setMatchType(matchType);
                 okooo.setMatchTime(matchTime);
-                okooo.setHostTeam(hostTeam);
-                okooo.setGuestTeam(guestTeam);
-                if (StringUtils.isNotEmpty(zhishu)) {
-                    okooo.setZhishu(zhishu);
+                okooo.setHost(host);
+                okooo.setGuest(guest);
+                if (StringUtils.isNotEmpty(idx)) {
+                    okooo.setIdx(idx);
                 }
-                okooo.setMatchResult(matchResult);
+                okooo.setResult(result);
                 okoooMapper.insertSelective(okooo);
             } else {
-                existed.setZhishu(diff(zhishu, existed.getZhishu()));
+                existed.setIdx(diff(idx, existed.getIdx()));
                 okoooMapper.updateByPrimaryKeySelective(existed);
             }
         }
@@ -75,7 +75,7 @@ public class OkoooService {
 
         Map<String, String> params = new HashMap<>();
         params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17");
-        params.put("HandicapNumber", "-1,-2,-3,1,2");
+        params.put("HandicapNumber", "-1,-2,-3,1,qu");
         params.put("BetDate", df.format(currentDate));
         params.put("MakerType", "AuthoriteBooks");
         params.put("PageID", String.valueOf(page));
@@ -93,23 +93,23 @@ public class OkoooService {
             String matchTime = left.get(2).text();
 
             Element td = one.select("table tr.titlebg td:contains(所选公司凯利离散度)").get(0);
-            String w = td.parent().select("td").get(1).text();
-            String d = td.parent().select("td").get(2).text();
-            String l = td.parent().select("td").get(2).text();
+            String w = td.parent().select("td").get(1).text().replaceAll("\\s", "");
+            String d = td.parent().select("td").get(2).text().replaceAll("\\s", "");
+            String l = td.parent().select("td").get(2).text().replaceAll("\\s", "");
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
-            if (StringUtils.isEmpty(existed.getKaili())) {
+            if (StringUtils.isEmpty(existed.getKelly())) {
                 if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
-                    existed.setKaili(w + "|" + d + "|" + l);
+                    existed.setKelly(w + "|" + d + "|" + l);
                 }
             } else {
-                String[] kailis = StringUtils.split(existed.getKaili(), "|");
+                String[] kailis = StringUtils.split(existed.getKelly(), "|");
                 String _w = kailis[0];
                 String _d = kailis[1];
                 String _l = kailis[2];
                 String kaili = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setKaili(kaili);
+                existed.setKelly(kaili);
             }
 
             okoooMapper.updateByPrimaryKeySelective(existed);
@@ -143,15 +143,17 @@ public class OkoooService {
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
-            if (StringUtils.isEmpty(existed.getChayi())) {
-                existed.setChayi(w + "|" + d + "|" + l);
+            if (StringUtils.isEmpty(existed.getDiff())) {
+                if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
+                    existed.setDiff(w + "|" + d + "|" + l);
+                }
             } else {
-                String[] chayis = StringUtils.split(existed.getChayi(), "|");
+                String[] chayis = StringUtils.split(existed.getDiff(), "|");
                 String _w = chayis[0];
                 String _d = chayis[1];
                 String _l = chayis[2];
                 String chayi = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setChayi(chayi);
+                existed.setDiff(chayi);
             }
 
             if (StringUtils.isEmpty(existed.getOdds())) {
@@ -163,10 +165,6 @@ public class OkoooService {
                 String _ol = oddss[2];
                 String odds = diff(ow, _ow) + "|" + diff(od, _od) + "|" + diff(ol, _ol);
                 existed.setOdds(odds);
-            }
-
-            if ("||".equals(existed.getChayi())) {
-                existed.setChayi(null);
             }
 
             okoooMapper.updateByPrimaryKeySelective(existed);
