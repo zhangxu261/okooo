@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class OkoooService {
@@ -27,7 +29,7 @@ public class OkoooService {
     public void fetch() {
         fetchZhishu();
         fetchChayi();
-        fetchKaili();
+        fetchKaili(1);
     }
 
     public void fetchZhishu() {
@@ -67,12 +69,19 @@ public class OkoooService {
         }
     }
 
-    public void fetchKaili() {
+    public void fetchKaili(int page) {
         Date currentDate = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String url = "http://www.okooo.com/jingcai/shuju/peilv/" + df.format(currentDate);
+        SimpleDateFormat df = new SimpleDateFormat("u");
 
-        String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
+        Map<String, String> params = new HashMap<>();
+        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17");
+        params.put("HandicapNumber", "-1,-2,-3,1,2");
+        params.put("BetDate", df.format(currentDate));
+        params.put("MakerType", "AuthoriteBooks");
+        params.put("PageID", String.valueOf(page));
+        params.put("HasEnd", "0");
+        String html = SimpleHttpClient.getCurrent().post("http://www.okooo.com/jingcai/shuju/peilv/", params).getResponseText();
+
         Document doc = Jsoup.parse(html);
 
         Elements divs = doc.select("div.pankoudata");
@@ -91,14 +100,16 @@ public class OkoooService {
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
             if (StringUtils.isEmpty(existed.getKaili())) {
-                existed.setKaili(w + "|" + d + "|" + l);
+                if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
+                    existed.setKaili(w + "|" + d + "|" + l);
+                }
             } else {
                 String[] kailis = StringUtils.split(existed.getKaili(), "|");
                 String _w = kailis[0];
                 String _d = kailis[1];
                 String _l = kailis[2];
                 String kaili = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setChayi(kaili);
+                existed.setKaili(kaili);
             }
 
             okoooMapper.updateByPrimaryKeySelective(existed);
@@ -164,6 +175,7 @@ public class OkoooService {
 
 
     private String diff(String newStr, String oldStr) {
+        oldStr = StringUtils.isEmpty(oldStr) ? "" : oldStr;
         String rs = oldStr;
         //先判断有没有-》
         if (StringUtils.contains(oldStr, S)) {
