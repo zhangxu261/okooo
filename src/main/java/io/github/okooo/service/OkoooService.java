@@ -77,7 +77,7 @@ public class OkoooService {
 
         Map<String, String> params = new HashMap<>();
         params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17");
-        params.put("HandicapNumber", "-1,-2,-3,1,qu");
+        params.put("HandicapNumber", "-1,-2,-3,1,2");
         params.put("BetDate", df.format(currentDate));
         params.put("MakerType", "AuthoriteBooks");
         params.put("PageID", String.valueOf(page));
