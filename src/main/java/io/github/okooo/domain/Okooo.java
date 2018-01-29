@@ -1,34 +1,19 @@
 package io.github.okooo.domain;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Table
-public class Zhishu {
+public class Okooo {
 
     @Id
     private Long id;
-
-    @Column(length = 10)
     private String serial;
-
-    @Column(length = 20)
     private String matchType;
-
-    @Column(length = 20)
     private String matchTime;
-
-    @Column(length = 40)
     private String hostTeam;
-
-    @Column(length = 40)
     private String guestTeam;
-
-    @Column(length = 100)
-    private String remind;
-
-    @Column(length = 10)
+    private String zhishu;
+    private String chayi;
+    private String odds;
     private String matchResult;
 
     public Long getId() {
@@ -79,12 +64,28 @@ public class Zhishu {
         this.guestTeam = guestTeam;
     }
 
-    public String getRemind() {
-        return remind;
+    public String getZhishu() {
+        return zhishu;
     }
 
-    public void setRemind(String remind) {
-        this.remind = remind;
+    public void setZhishu(String zhishu) {
+        this.zhishu = zhishu;
+    }
+
+    public String getChayi() {
+        return chayi;
+    }
+
+    public void setChayi(String chayi) {
+        this.chayi = chayi;
+    }
+
+    public String getOdds() {
+        return odds;
+    }
+
+    public void setOdds(String odds) {
+        this.odds = odds;
     }
 
     public String getMatchResult() {
@@ -94,5 +95,4 @@ public class Zhishu {
     public void setMatchResult(String matchResult) {
         this.matchResult = matchResult;
     }
-
 }

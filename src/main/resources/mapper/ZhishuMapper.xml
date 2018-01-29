@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="io.github.okooo.mapper.ZhishuMapper">
-
-    <select id="findBySerialAndMatchTime" resultType="io.github.okooo.domain.Zhishu">
-        select * from zhishu where serial = #{serial} and match_time = #{matchTime}
-    </select>
-</mapper>
