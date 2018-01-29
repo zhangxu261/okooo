@@ -27,6 +27,7 @@ public class OkoooService {
     public void fetch() {
         fetchZhishu();
         fetchChayi();
+        fetchKaili();
     }
 
     public void fetchZhishu() {
@@ -64,23 +65,42 @@ public class OkoooService {
         }
     }
 
-    private String diff(String newStr, String oldStr) {
-        String rs = oldStr;
-        //先判断有没有-》
-        if (StringUtils.contains(oldStr, S)) {
-            int backIdx = StringUtils.indexOf(oldStr, S);
-            String backStr = StringUtils.substring(oldStr, backIdx + 2);
-            //新值旧值比较
-            if (!backStr.equals(newStr)) {
-                String frontStr = StringUtils.substring(oldStr, 0, backIdx);
-                rs = frontStr + "->" + newStr;
+    public void fetchKaili() {
+        Date currentDate = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String url = "http://www.okooo.com/jingcai/shuju/peilv/" + df.format(currentDate);
+
+        String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
+        Document doc = Jsoup.parse(html);
+
+        Elements divs = doc.select("div.pankoudata");
+        for (int i = 0; i < divs.size(); i++) {
+            Element one = divs.get(i);
+
+            Elements left = one.select("div.magazineDateTit p.float_l b");
+            String serial = left.get(0).text();
+            String matchTime = left.get(2).text();
+
+            Element td = one.select("table tr.titlebg td:contains(所选公司凯利离散度)").get(0);
+            String w = td.parent().select("td").get(1).text();
+            String d = td.parent().select("td").get(2).text();
+            String l = td.parent().select("td").get(2).text();
+
+            Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
+
+            if (StringUtils.isEmpty(existed.getKaili())) {
+                existed.setKaili(w + "|" + d + "|" + l);
+            } else {
+                String[] kailis = StringUtils.split(existed.getKaili(), "|");
+                String _w = kailis[0];
+                String _d = kailis[1];
+                String _l = kailis[2];
+                String kaili = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
+                existed.setChayi(kaili);
             }
-        } else {
-            if (!oldStr.equals(newStr)) {
-                rs = oldStr + "->" + newStr;
-            }
+
+            okoooMapper.updateByPrimaryKeySelective(existed);
         }
-        return rs;
     }
 
     public void fetchChayi() {
@@ -110,21 +130,49 @@ public class OkoooService {
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
-            String[] chayis = StringUtils.split(existed.getChayi(), "|");
-            String _w = chayis[0];
-            String _d = chayis[1];
-            String _l = chayis[2];
-            String chayi = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-            existed.setChayi(chayi);
+            if (StringUtils.isEmpty(existed.getChayi())) {
+                existed.setChayi(w + "|" + d + "|" + l);
+            } else {
+                String[] chayis = StringUtils.split(existed.getChayi(), "|");
+                String _w = chayis[0];
+                String _d = chayis[1];
+                String _l = chayis[2];
+                String chayi = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
+                existed.setChayi(chayi);
+            }
 
-            String[] oddss = StringUtils.split(existed.getOdds(), "|");
-            String _ow = oddss[0];
-            String _od = oddss[1];
-            String _ol = oddss[2];
-            String odds = diff(ow, _ow) + "|" + diff(od, _od) + "|" + diff(ol, _ol);
-            existed.setOdds(odds);
+            if (StringUtils.isEmpty(existed.getOdds())) {
+                existed.setOdds(ow + "|" + od + "|" + ol);
+            } else {
+                String[] oddss = StringUtils.split(existed.getOdds(), "|");
+                String _ow = oddss[0];
+                String _od = oddss[1];
+                String _ol = oddss[2];
+                String odds = diff(ow, _ow) + "|" + diff(od, _od) + "|" + diff(ol, _ol);
+                existed.setOdds(odds);
+            }
 
             okoooMapper.updateByPrimaryKeySelective(existed);
         }
+    }
+
+
+    private String diff(String newStr, String oldStr) {
+        String rs = oldStr;
+        //先判断有没有-》
+        if (StringUtils.contains(oldStr, S)) {
+            int backIdx = StringUtils.indexOf(oldStr, S);
+            String backStr = StringUtils.substring(oldStr, backIdx + 2);
+            //新值旧值比较
+            if (!backStr.equals(newStr)) {
+                String frontStr = StringUtils.substring(oldStr, 0, backIdx);
+                rs = frontStr + "->" + newStr;
+            }
+        } else {
+            if (!oldStr.equals(newStr)) {
+                rs = oldStr + "->" + newStr;
+            }
+        }
+        return rs;
     }
 }

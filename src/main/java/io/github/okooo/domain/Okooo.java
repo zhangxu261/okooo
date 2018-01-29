@@ -13,6 +13,7 @@ public class Okooo {
     private String guestTeam;
     private String zhishu;
     private String chayi;
+    private String kaili;
     private String odds;
     private String matchResult;
 
@@ -78,6 +79,14 @@ public class Okooo {
 
     public void setChayi(String chayi) {
         this.chayi = chayi;
+    }
+
+    public String getKaili() {
+        return kaili;
+    }
+
+    public void setKaili(String kaili) {
+        this.kaili = kaili;
     }
 
     public String getOdds() {

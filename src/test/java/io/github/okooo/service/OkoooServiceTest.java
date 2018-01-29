@@ -21,8 +21,8 @@ public class OkoooServiceTest {
     private OkoooService service;
 
     @Test
-    public void fetchChayi() {
-        service.fetchChayi();
+    public void fetch() {
+        service.fetchKaili();
     }
 
     @Test
