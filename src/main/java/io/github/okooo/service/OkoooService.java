@@ -141,17 +141,17 @@ public class OkoooService {
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
-            if (StringUtils.isEmpty(existed.getDiff())) {
+            if (StringUtils.isEmpty(existed.getBiff())) {
                 if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
-                    existed.setDiff(w + "|" + d + "|" + l);
+                    existed.setBiff(w + "|" + d + "|" + l);
                 }
             } else {
-                String[] diffs = StringUtils.split(existed.getDiff(), "|");
+                String[] diffs = StringUtils.split(existed.getBiff(), "|");
                 String _w = diffs[0];
                 String _d = diffs[1];
                 String _l = diffs[2];
                 String diff = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setDiff(diff);
+                existed.setBiff(diff);
             }
 
             if (StringUtils.isEmpty(existed.getOdds())) {
@@ -164,6 +164,11 @@ public class OkoooService {
                 String odds = diff(ow, _ow) + "|" + diff(od, _od) + "|" + diff(ol, _ol);
                 existed.setOdds(odds);
             }
+
+            trs = one.select("table.tab2 tr");
+            String h = trs.get(3).select("td").get(0).text().replaceAll("\\s", "");
+            String g = trs.get(3).select("td").get(1).text().replaceAll("\\s", "");
+            existed.setGiff(h + "|" + g);
 
             okoooMapper.updateByPrimaryKeySelective(existed);
         }

@@ -15,6 +15,9 @@ public class OkoooServiceTest {
 
     @Test
     public void fetch() {
+        service.fetchIdx();
+        service.fetchDiff();
+        service.fetchKelly(1,2,0);
         service.fetchKelly(2,2,0);
     }
 

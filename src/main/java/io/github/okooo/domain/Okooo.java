@@ -12,7 +12,8 @@ public class Okooo {
     private String host;
     private String guest;
     private String idx;
-    private String diff;
+    private String biff;
+    private String giff;
     private String kelly;
     private String odds;
     private String result;
@@ -73,12 +74,20 @@ public class Okooo {
         this.idx = idx;
     }
 
-    public String getDiff() {
-        return diff;
+    public String getBiff() {
+        return biff;
     }
 
-    public void setDiff(String diff) {
-        this.diff = diff;
+    public void setBiff(String biff) {
+        this.biff = biff;
+    }
+
+    public String getGiff() {
+        return giff;
+    }
+
+    public void setGiff(String giff) {
+        this.giff = giff;
     }
 
     public String getKelly() {
