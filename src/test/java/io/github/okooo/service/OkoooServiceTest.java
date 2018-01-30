@@ -15,6 +15,7 @@ public class OkoooServiceTest {
 
     @Test
     public void fetch() {
+        service.fetchKelly(2,2,0);
     }
 
 }

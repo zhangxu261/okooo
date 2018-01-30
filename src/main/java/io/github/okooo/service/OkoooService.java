@@ -26,12 +26,10 @@ public class OkoooService {
         this.okoooMapper = okoooMapper;
     }
 
-    //每20分钟抓一次
     @Scheduled(cron = "1 */20 * * * ?")
     public void fetch() {
         fetchIdx();
         fetchDiff();
-        fetchKelly(1);
     }
 
     public void fetchIdx() {
@@ -66,22 +64,20 @@ public class OkoooService {
                 okoooMapper.insertSelective(okooo);
             } else {
                 existed.setIdx(diff(idx, existed.getIdx()));
+                existed.setResult(result);
                 okoooMapper.updateByPrimaryKeySelective(existed);
             }
         }
     }
 
-    public void fetchKelly(int page) {
-        Date currentDate = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("u");
-
+    public void fetchKelly(int page, int date, int end) {
         Map<String, String> params = new HashMap<>();
-        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17");
+        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17,18,24,328,330,333,384");
         params.put("HandicapNumber", "-1,-2,-3,1,2");
-        params.put("BetDate", df.format(currentDate));
+        params.put("BetDate", String.valueOf(date));
         params.put("MakerType", "AuthoriteBooks");
         params.put("PageID", String.valueOf(page));
-        params.put("HasEnd", "0");
+        params.put("HasEnd", String.valueOf(end));
         String html = SimpleHttpClient.getCurrent().post("http://www.okooo.com/jingcai/shuju/peilv/", params).getResponseText();
 
         Document doc = Jsoup.parse(html);
@@ -97,7 +93,7 @@ public class OkoooService {
             Element td = one.select("table tr.titlebg td:contains(所选公司凯利离散度)").get(0);
             String w = td.parent().select("td").get(1).text().replaceAll("\\s", "");
             String d = td.parent().select("td").get(2).text().replaceAll("\\s", "");
-            String l = td.parent().select("td").get(2).text().replaceAll("\\s", "");
+            String l = td.parent().select("td").get(3).text().replaceAll("\\s", "");
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
@@ -150,12 +146,12 @@ public class OkoooService {
                     existed.setDiff(w + "|" + d + "|" + l);
                 }
             } else {
-                String[] chayis = StringUtils.split(existed.getDiff(), "|");
-                String _w = chayis[0];
-                String _d = chayis[1];
-                String _l = chayis[2];
-                String chayi = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setDiff(chayi);
+                String[] diffs = StringUtils.split(existed.getDiff(), "|");
+                String _w = diffs[0];
+                String _d = diffs[1];
+                String _l = diffs[2];
+                String diff = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
+                existed.setDiff(diff);
             }
 
             if (StringUtils.isEmpty(existed.getOdds())) {
@@ -175,22 +171,25 @@ public class OkoooService {
 
 
     private String diff(String newStr, String oldStr) {
-        oldStr = StringUtils.isEmpty(oldStr) ? "" : oldStr;
-        String rs = oldStr;
-        //先判断有没有-》
-        if (StringUtils.contains(oldStr, S)) {
-            int backIdx = StringUtils.indexOf(oldStr, S);
-            String backStr = StringUtils.substring(oldStr, backIdx + 2);
-            //新值旧值比较
-            if (!backStr.equals(newStr)) {
-                String frontStr = StringUtils.substring(oldStr, 0, backIdx);
-                rs = frontStr + "->" + newStr;
-            }
+        if (StringUtils.isEmpty(newStr) && StringUtils.isEmpty(oldStr)) {
+            return null;
+        } else if (StringUtils.isNotEmpty(newStr) && StringUtils.isEmpty(oldStr)) {
+            return newStr;
+        } else if (StringUtils.isEmpty(newStr) && StringUtils.isNotEmpty(oldStr)) {
+            return oldStr;
         } else {
-            if (!oldStr.equals(newStr)) {
-                rs = oldStr + "->" + newStr;
+            if (StringUtils.contains(oldStr, S)) {
+                int backIdx = StringUtils.indexOf(oldStr, S);
+                String backStr = StringUtils.substring(oldStr, backIdx + 2);
+                if (!backStr.equals(newStr)) {
+                    String frontStr = StringUtils.substring(oldStr, 0, backIdx);
+                    return frontStr + "->" + newStr;
+                } else {
+                    return oldStr;
+                }
+            } else {
+                return oldStr + "->" + newStr;
             }
         }
-        return rs;
     }
 }
