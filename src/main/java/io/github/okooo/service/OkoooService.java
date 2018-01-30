@@ -188,7 +188,11 @@ public class OkoooService {
                     return oldStr;
                 }
             } else {
-                return oldStr + "->" + newStr;
+                if (!oldStr.equals(newStr)) {
+                    return oldStr + "->" + newStr;
+                } else {
+                    return oldStr;
+                }
             }
         }
     }
