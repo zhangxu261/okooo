@@ -8,11 +8,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,12 +21,6 @@ public class OkoooService {
 
     public OkoooService(OkoooMapper okoooMapper) {
         this.okoooMapper = okoooMapper;
-    }
-
-    @Scheduled(cron = "1 */20 * * * ?")
-    public void fetch() {
-        fetchIdx();
-        fetchDiff();
     }
 
     public void fetchIdx() {
@@ -46,7 +37,9 @@ public class OkoooService {
             String matchTime = tds.get(2).text();
             String host = tds.get(3).text();
             String guest = tds.get(5).text();
-            String idx = tds.get(12).text().replaceAll("\\s", "");
+            String w = tds.get(9).text().replaceAll("\\s", "");
+            String d = tds.get(10).text().replaceAll("\\s", "");
+            String l = tds.get(11).text().replaceAll("\\s", "");
             String result = tds.get(13).text();
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
@@ -57,27 +50,29 @@ public class OkoooService {
                 okooo.setMatchTime(matchTime);
                 okooo.setHost(host);
                 okooo.setGuest(guest);
-                if (StringUtils.isNotEmpty(idx)) {
-                    okooo.setIdx(idx);
+                if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
+                    existed.setIdx(w + "|" + d + "|" + l);
                 }
                 okooo.setResult(result);
                 okoooMapper.insertSelective(okooo);
             } else {
-                existed.setIdx(diff(idx, existed.getIdx()));
+                if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
+                    existed.setIdx(w + "|" + d + "|" + l);
+                }
                 existed.setResult(result);
                 okoooMapper.updateByPrimaryKeySelective(existed);
             }
         }
     }
 
-    public void fetchKelly(int page, int date, int end) {
+    public void fetchKelly(int page, int date) {
         Map<String, String> params = new HashMap<>();
-        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17,18,24,328,330,333,384");
+        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17,24,328,330,333,384,18,326,329");
         params.put("HandicapNumber", "-1,-2,-3,1,2");
         params.put("BetDate", String.valueOf(date));
         params.put("MakerType", "AuthoriteBooks");
         params.put("PageID", String.valueOf(page));
-        params.put("HasEnd", String.valueOf(end));
+        params.put("HasEnd", "1");
         String html = SimpleHttpClient.getCurrent().post("http://www.okooo.com/jingcai/shuju/peilv/", params).getResponseText();
 
         Document doc = Jsoup.parse(html);
@@ -97,29 +92,24 @@ public class OkoooService {
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
-            if (StringUtils.isEmpty(existed.getKelly())) {
-                if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
-                    existed.setKelly(w + "|" + d + "|" + l);
-                }
-            } else {
-                String[] kailis = StringUtils.split(existed.getKelly(), "|");
-                String _w = kailis[0];
-                String _d = kailis[1];
-                String _l = kailis[2];
-                String kaili = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setKelly(kaili);
+            if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
+                existed.setKelly(w + "|" + d + "|" + l);
             }
 
             okoooMapper.updateByPrimaryKeySelective(existed);
         }
     }
 
-    public void fetchDiff() {
-        Date currentDate = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String url = "http://www.okooo.com/jingcai/shuju/chayi/" + df.format(currentDate);
+    public void fetchDiff(int page, int date) {
+        Map<String, String> params = new HashMap<>();
+        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17,24,328,330,333,384,18,326,329");
+        params.put("HandicapNumber", "0");
+        params.put("BetDate", String.valueOf(date));
+        params.put("MakerType", "");
+        params.put("PageID", String.valueOf(page));
+        params.put("HasEnd", "1");
+        String html = SimpleHttpClient.getCurrent().post("http://www.okooo.com/jingcai/shuju/chayi/", params).getResponseText();
 
-        String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
         Document doc = Jsoup.parse(html);
 
         Elements divs = doc.select("div.pankoudata");
@@ -141,17 +131,8 @@ public class OkoooService {
 
             Okooo existed = okoooMapper.findOneBySerialAndMatchTime(serial, matchTime);
 
-            if (StringUtils.isEmpty(existed.getBiff())) {
-                if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
-                    existed.setBiff(w + "|" + d + "|" + l);
-                }
-            } else {
-                String[] diffs = StringUtils.split(existed.getBiff(), "|");
-                String _w = diffs[0];
-                String _d = diffs[1];
-                String _l = diffs[2];
-                String diff = diff(w, _w) + "|" + diff(d, _d) + "|" + diff(l, _l);
-                existed.setBiff(diff);
+            if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
+                existed.setBiff(w + "|" + d + "|" + l);
             }
 
             if (StringUtils.isEmpty(existed.getOdds())) {
@@ -168,7 +149,10 @@ public class OkoooService {
             trs = one.select("table.tab2 tr");
             String h = trs.get(3).select("td").get(0).text().replaceAll("\\s", "");
             String g = trs.get(3).select("td").get(1).text().replaceAll("\\s", "");
-            existed.setGiff(h + "|" + g);
+            if (StringUtils.isNotEmpty(h) && StringUtils.isNotEmpty(g)) {
+                existed.setGiff(h + "|" + g);
+            }
+
 
             okoooMapper.updateByPrimaryKeySelective(existed);
         }
