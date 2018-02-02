@@ -51,7 +51,7 @@ public class OkoooService {
                 okooo.setHost(host);
                 okooo.setGuest(guest);
                 if (StringUtils.isNotEmpty(w) && StringUtils.isNotEmpty(d) && StringUtils.isNotEmpty(l)) {
-                    existed.setIdx(w + "|" + d + "|" + l);
+                    okooo.setIdx(w + "|" + d + "|" + l);
                 }
                 okooo.setResult(result);
                 okoooMapper.insertSelective(okooo);
@@ -67,7 +67,7 @@ public class OkoooService {
 
     public void fetchKelly(int page, int date) {
         Map<String, String> params = new HashMap<>();
-        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17,24,328,330,333,384,18,326,329");
+        params.put("LeagueID", "8,17,18,19,23,24,34,35,36,37,38,44,131,136,155,182,238,244,326,328,329,330,333,347,352,372,384,463");
         params.put("HandicapNumber", "-1,-2,-3,1,2");
         params.put("BetDate", String.valueOf(date));
         params.put("MakerType", "AuthoriteBooks");
@@ -102,7 +102,7 @@ public class OkoooService {
 
     public void fetchDiff(int page, int date) {
         Map<String, String> params = new HashMap<>();
-        params.put("LeagueID", "136,8,23,37,44,19,131,38,34,36,35,352,372,155,238,182,347,463,17,24,328,330,333,384,18,326,329");
+        params.put("LeagueID", "8,17,18,19,23,24,34,35,36,37,38,44,131,136,155,182,238,244,326,328,329,330,333,347,352,372,384,463");
         params.put("HandicapNumber", "0");
         params.put("BetDate", String.valueOf(date));
         params.put("MakerType", "");
