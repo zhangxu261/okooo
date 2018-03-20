@@ -12,6 +12,12 @@ spring:
         url: jdbc:mysql://localhost:3306/okooo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
         username: root
         password: root
+    jackson:  # json日期格式
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+    thymeleaf:
+        mode: LEGACYHTML5
+        encoding: UTF-8
 
 # Mybatis配置
 mybatis:

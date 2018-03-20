@@ -2,7 +2,7 @@ package io.github.okooo.domain;
 
 import javax.persistence.Id;
 
-public class Okooo {
+public class Game {
 
     @Id
     private Long id;
@@ -11,11 +11,6 @@ public class Okooo {
     private String matchTime;
     private String host;
     private String guest;
-    private String idx;
-    private String biff;
-    private String giff;
-    private String kelly;
-    private String odds;
     private String result;
 
     public Long getId() {
@@ -64,46 +59,6 @@ public class Okooo {
 
     public void setGuest(String guest) {
         this.guest = guest;
-    }
-
-    public String getIdx() {
-        return idx;
-    }
-
-    public void setIdx(String idx) {
-        this.idx = idx;
-    }
-
-    public String getBiff() {
-        return biff;
-    }
-
-    public void setBiff(String biff) {
-        this.biff = biff;
-    }
-
-    public String getGiff() {
-        return giff;
-    }
-
-    public void setGiff(String giff) {
-        this.giff = giff;
-    }
-
-    public String getKelly() {
-        return kelly;
-    }
-
-    public void setKelly(String kelly) {
-        this.kelly = kelly;
-    }
-
-    public String getOdds() {
-        return odds;
-    }
-
-    public void setOdds(String odds) {
-        this.odds = odds;
     }
 
     public String getResult() {
