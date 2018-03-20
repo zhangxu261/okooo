@@ -46,7 +46,7 @@ public class OkoooService {
 
             if (StringUtils.isEmpty(result)) {
                 Idx last = idxMapper.findLastOne(serial, matchTime);
-                boolean same = last.getWin().equals(w) && last.getDraw().equals(d) && last.getLose().equals(l);
+                boolean same = last != null && last.getWin().equals(w) && last.getDraw().equals(d) && last.getLose().equals(l);
                 if (!same) {
                     Idx idx = new Idx();
                     idx.setSerial(serial);
@@ -57,6 +57,7 @@ public class OkoooService {
                     idx.setRemind(r);
                     idxMapper.insertSelective(idx);
                 }
+
             }
 
             Game existed = gameMapper.findOneBySerialAndMatchTime(serial, matchTime);
