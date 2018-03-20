@@ -47,8 +47,7 @@ public class OkoooService {
             if (StringUtils.isEmpty(result)) {
                 Idx last = idxMapper.findLastOne(serial, matchTime);
                 boolean same = last.getWin().equals(w) && last.getDraw().equals(d) && last.getLose().equals(l);
-                boolean flag = w.contains("↓") || w.contains("↑") || d.contains("↓") || d.contains("↑") || l.contains("↓") || l.contains("↑");
-                if (!same && flag) {
+                if (!same) {
                     Idx idx = new Idx();
                     idx.setSerial(serial);
                     idx.setMatchTime(matchTime);
