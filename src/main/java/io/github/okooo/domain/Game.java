@@ -1,10 +1,12 @@
 package io.github.okooo.domain;
 
-import javax.persistence.Id;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 
+@TableName
 public class Game {
 
-    @Id
+    @TableId
     private Long id;
     private String serial;
     private String matchType;
@@ -68,4 +70,5 @@ public class Game {
     public void setResult(String result) {
         this.result = result;
     }
+
 }

@@ -1,12 +1,14 @@
 package io.github.okooo.domain;
 
-import javax.persistence.Id;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+
 import java.util.Date;
 
-
+@TableName
 public class Idx {
 
-    @Id
+    @TableId
     private Long id;
     private String serial;
     private String matchTime;
@@ -79,4 +81,5 @@ public class Idx {
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
+
 }

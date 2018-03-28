@@ -55,7 +55,7 @@ public class OkoooService {
                     idx.setDraw(d);
                     idx.setLose(l);
                     idx.setRemind(r);
-                    idxMapper.insertSelective(idx);
+                    idxMapper.insert(idx);
                 }
 
             }
@@ -69,10 +69,10 @@ public class OkoooService {
                 okooo.setHost(host);
                 okooo.setGuest(guest);
                 okooo.setResult(result);
-                gameMapper.insertSelective(okooo);
+                gameMapper.insert(okooo);
             } else {
                 existed.setResult(result);
-                gameMapper.updateByPrimaryKeySelective(existed);
+                gameMapper.updateById(existed);
             }
         }
     }
