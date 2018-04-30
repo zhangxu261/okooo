@@ -23,7 +23,7 @@ public class OkoooService {
         this.idxMapper = idxMapper;
     }
 
-    @Scheduled(cron = "1 */1 * * * ?")
+    @Scheduled(cron = "1 */8 * * * ?")
     public void fetchIdx() {
         String url = "http://www.okooo.com/jingcai/shuju/zhishu/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();

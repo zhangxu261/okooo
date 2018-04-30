@@ -2,22 +2,16 @@ logging:
     level:
         io.github.okooo: DEBUG
 server:
-    port: 8888
+    port: 7001
 spring:
     application:
         name: okooo
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/okooo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-        username: root
-        password: root
-    jackson:  # json日期格式
-        date-format: yyyy-MM-dd HH:mm:ss
-        time-zone: GMT+8
-    thymeleaf:
-        mode: LEGACYHTML5
-        encoding: UTF-8
+        url: jdbc:mysql://127.0.0.1:3306/okooo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+        username: okooo
+        password: okooo,123
 
 # Mybatis配置
 mybatis-plus:

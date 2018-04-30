@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 @TableName
 public class Game {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     private String serial;
     private String matchType;

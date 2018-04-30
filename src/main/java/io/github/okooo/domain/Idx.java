@@ -8,7 +8,7 @@ import java.util.Date;
 @TableName
 public class Idx {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Long id;
     private String serial;
     private String matchTime;
