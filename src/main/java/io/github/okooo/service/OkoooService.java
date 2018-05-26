@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class OkoooService {
     private final GameMapper gameMapper;
@@ -23,7 +25,7 @@ public class OkoooService {
         this.idxMapper = idxMapper;
     }
 
-    @Scheduled(cron = "1 */8 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void fetchIdx() {
         String url = "http://www.okooo.com/jingcai/shuju/zhishu/";
         String html = SimpleHttpClient.getCurrent().get(url).getResponseText();
@@ -55,9 +57,9 @@ public class OkoooService {
                     idx.setDraw(d);
                     idx.setLose(l);
                     idx.setRemind(r);
+                    idx.setCreatedTime(new Date());
                     idxMapper.insert(idx);
                 }
-
             }
 
             Game existed = gameMapper.findOneBySerialAndMatchTime(serial, matchTime);
